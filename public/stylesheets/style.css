@@ -28,3 +28,9 @@
     background-color: #42AEEC;
     color: #fff;
 }
+.input-error{
+  border:1px solid red;
+}
+.error-message{
+  width:100%;
+}
