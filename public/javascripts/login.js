@@ -41,7 +41,9 @@ function Validation(config){
       				},
       				datatype :"json",
       				success : function (res){
-                console.log(res);
+                //console.log(res);
+                localStorage.setItem('token','Bearer '+res.token);
+                window.location.replace("http://localhost:3000/home.html");
               },
               error : function(err){
                 dom.loginFormInput.val("");
@@ -49,7 +51,7 @@ function Validation(config){
               }
       			});
           }
-		}
+		  }
 	}
   return validator;
 }
@@ -58,7 +60,7 @@ $(document).ready(function() {
 	var loginEmail = $("#loginEmail");
 	var loginPassword = $("#loginPassword");
 	var login = $("#loginBtn");
-  var formInput = $("#loginForm :input");
+  var formInput = $("#loginForm input");
 
   let user = {
     email : loginEmail,
@@ -72,10 +74,6 @@ $(document).ready(function() {
         loginEmail.addClass("input-error");
 	});
 
-  loginEmail.focus(function(){
-    validator.onElementFocus(loginEmail)
-  });
-
 	loginPassword.focusout(function(){
 		if(!validator.checkPassword())
       loginPassword.addClass("input-error");
@@ -85,12 +83,10 @@ $(document).ready(function() {
     validator.onElementFocus(loginPassword);
   })
 
-
-  /*
   formInput.focus(function(element){
-      this.removeClass("error");
+      validator.onElementFocus($(this))
   });
-  */
+
 
 	login.click(function(event){
 		event.preventDefault();

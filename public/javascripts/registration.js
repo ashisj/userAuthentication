@@ -21,14 +21,14 @@ function Validation(config){
     emptyError : function(element){
       element.html("This field should not be empty");
     },
-    error : function(element,message){
+    messageError : function(element,message){
       element.html(message);
     },
     checkName : function(){
-        if(config.name.val().length===0){
+        if(config.name.val().trim().length===0){
   			     this.emptyError(dom.nameError);
   		  }else if(!/[A-Za-z ]+/.test(config.name.val().trim())){
-  			     this.error(dom.nameError,"Name should contain only alphabets");
+  			     this.messageError(dom.nameError,"Name should contain only alphabets");
   		  } else {
   			     return true;
   		  }
@@ -36,11 +36,25 @@ function Validation(config){
     },
 		checkEmail : function(){
         let emailRegEX = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-        if(config.email.length === 0){
+        if(config.email.val().length === 0){
              this.emptyError(dom.emailError);
         } else if(!emailRegEX.test(config.email.val().trim())){
-  			     this.error(dom.emailError,"please enter a valid email address eg:- a@gmail.com");
+  			     this.messageError(dom.emailError,"please enter a valid email address eg:- a@gmail.com");
   			} else {
+          $.ajax({
+            method:"get",
+            url:"http://localhost:3000/auth/email/"+config.email.val(),
+            datatype:"json",
+            success:(res)=>{
+              if(res.status == 200){
+                this.messageError(dom.emailError,res.message);
+                return false;
+              }
+            },
+            error:(err) => {
+              alert("some error occoured");
+            }
+          });
              return true;
         }
   			return false;
@@ -49,8 +63,23 @@ function Validation(config){
 		    if (config.phoneNumber.val().length === 0) {
 				     this.emptyError(dom.phoneNumberError);
 		    }  else if (config.phoneNumber.val().trim().match(/[1-9][0-9]{9}/)!=config.phoneNumber.val().trim()){
-			       this.error(dom.phoneNumberError,'phone number must contain 10 digits');
+			       this.messageError(dom.phoneNumberError,'phone number must contain 10 digits');
 		    } else {
+          $.ajax({
+            method:"get",
+            url:"http://localhost:3000/auth/phoneNumber/"+config.phoneNumber.val(),
+            datatype:"json",
+            success:(res)=>{
+              if(res.status == 200){
+                this.messageError(dom.phoneNumberError,res.message);
+                return false;
+              }
+            },
+            error:(err) => {
+               alert("some error occoured");
+              //alert(err.message);
+            }
+          });
 				     return true;
 		    }
 		    return false;
@@ -58,7 +87,7 @@ function Validation(config){
 		checkPassword: function (){
        let passwordRegEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
        if ( (config.password.length === 0) || (!passwordRegEX.test(config.password.val().trim())) ){
-            this.error(dom.passwordError,"Password must contain at least 8 characters, including UPPER,lowercase and number");
+            this.messageError(dom.passwordError,"Password must contain at least 8 characters, including UPPER,lowercase and number");
             return false;
 			 }
 			 return true;
@@ -80,11 +109,14 @@ function Validation(config){
           },
           datatype :"json",
           success : function (res){
-            console.log(res);
+            dom.signupFormInput.val("");
+            dom.registrationFail.addClass("text-success");
+            dom.registrationFail.html(res.message);
           },
           error : function(err){
             dom.signupFormInput.val("");
-            dom.registrationFail.html("Authentication Failed");
+            dom.registrationFail.addClass("text-danger");
+            dom.registrationFail.html("Registration Failed");
           }
         });
       }
@@ -99,6 +131,8 @@ $(document).ready(function() {
   var phoneNumber = $("#phoneNumber");
 	var password = $("#password");
 	var signUp = $("#signupBtn");
+
+  var formInput = $("#signupForm input");
 
   let user = {
     name : name,
@@ -134,7 +168,13 @@ $(document).ready(function() {
         password.addClass("input-error");
 	});
 
+  formInput.focus(function(element){
+      validator.onElementFocus($(this))
+  });
 
+  formInput.on('input',function(element){
+      $(this).siblings('span').html("");
+  });
 
 	signUp.click(function(event){
 		event.preventDefault();
