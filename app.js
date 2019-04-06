@@ -3,18 +3,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/index');
 var authRouter = require('./api/routes/auth');
 
 var app = express();
+
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-console.log(process.env.ENV_VARIABLES);
+
 app.use((req,res,next) =>{
   res.header('Access-Control-Allow-Origin','*');
   res.header(
@@ -28,7 +27,6 @@ app.use((req,res,next) =>{
   next();
 });
 
-app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 app.use((req,res,next)=>{

@@ -1,15 +1,47 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    ashis
-  </body>
-  <script>
-    if(!localStorage.token){
+<link rel="import" href="/header.html">
+ <script>
+    if(!document.cookie){
       window.location.replace("http://localhost:3000/");
     }
+  </script> 
+<body>
+  <div class="container">
+      <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="nav navbar-nav  float-md-left">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>    
+            </ul>
+            <ul class="nav navbar-nav ml-auto">
+                <li><a href="#" id="abc"> Logout</a></li>
+              </ul>
+          </div>  
+        </nav>
+  </div>
+  <script>
+    $("#abc").click(function(e){
+      console.log(1);
+      
+      e.preventDefault();
+      $.ajax({
+          method:"get",
+          url:'http://localhost:3000/auth/logout',
+          success: function(res){
+            window.location.replace("http://localhost:3000/");
+          }
+        });
+    })
   </script>
+</body>
 </html>

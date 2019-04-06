@@ -74,8 +74,8 @@ exports.userLogin = (req,res,next) => {
                 expiresIn: 120
               }
             );
+            res.cookie('token',token)
             res.status(202).json({
-              token:token,
               message:"login successfull"
             });
             //return res.json({token:token});

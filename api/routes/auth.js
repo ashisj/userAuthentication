@@ -10,4 +10,9 @@ router.get('/email/:email',authController.checkNewEmail);
 
 router.get('/phoneNumber/:phoneNumber',authController.checkNewPhoneNumber);
 
+router.get('/logout',function(req,res){
+    res.clearCookie('token');
+    res.status(200).json({message:'logout sucessfully'});
+})
+
 module.exports = router;

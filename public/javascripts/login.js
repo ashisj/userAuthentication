@@ -41,8 +41,6 @@ function Validation(config){
       				},
       				datatype :"json",
       				success : function (res){
-                //console.log(res);
-                localStorage.setItem('token','Bearer '+res.token);
                 window.location.replace("http://localhost:3000/home.html");
               },
               error : function(err){
