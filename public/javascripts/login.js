@@ -1,4 +1,4 @@
-function Validation(config){
+function LoginValidation(config){
   if(!config){
     config = {
       email : $("#loginEmail"),
@@ -65,30 +65,30 @@ $(document).ready(function() {
     password : loginPassword
   };
 
-	var validator = new Validation(user);
+	var loginValidator = new LoginValidation(user);
 
 	loginEmail.focusout(function(){
-		if(!validator.checkEmail())
+		if(!loginValidator .checkEmail())
         loginEmail.addClass("input-error");
 	});
 
 	loginPassword.focusout(function(){
-		if(!validator.checkPassword())
+		if(!loginValidator .checkPassword())
       loginPassword.addClass("input-error");
 	});
 
   loginPassword.focus(function(){
-    validator.onElementFocus(loginPassword);
+    loginValidator .onElementFocus(loginPassword);
   })
 
   formInput.focus(function(element){
-      validator.onElementFocus($(this))
+    loginValidator.onElementFocus($(this))
   });
-
-
+  
 	login.click(function(event){
-		event.preventDefault();
-    //https://cors-anywhere.herokuapp.com/
-    validator.login();
+    event.preventDefault();
+    console.log(loginValidator );
+    
+    loginValidator.login();
 	});
 });
