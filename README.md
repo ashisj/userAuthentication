@@ -1,4 +1,8 @@
 # User Authentication using node js
+### to create project folder
+```
+express --no-view
+```
 ### to install dependency
 ```
 npm install
